@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery/core/theme/app_colors.dart';
-import 'package:food_delivery/features/auth/presentation/pages/home_page.dart';
+import 'package:food_delivery/features/auth/presentation/pages/login_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../bloc/onboarding/onboarding_bloc.dart';
@@ -162,7 +162,7 @@ class OnboardingView extends StatelessWidget {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => const HomePage(),
+                                      builder: (_) => const LoginPage(),
                                     ),
                                   );
                                 } else {
