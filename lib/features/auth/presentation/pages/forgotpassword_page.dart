@@ -1,16 +1,13 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery/bloc/LoginCubit.dart';
-import 'package:food_delivery/core/theme/app_colors.dart';
-import 'package:food_delivery/features/auth/presentation/pages/forgotpassword_page.dart';
-import 'package:food_delivery/features/auth/presentation/pages/home_page.dart';
-import 'package:food_delivery/features/auth/presentation/pages/signup_page.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+import '../../../../bloc/LoginCubit.dart';
+import '../../../../core/theme/app_colors.dart';
+
+class ForgotpasswordPage extends StatelessWidget {
+  const ForgotpasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +35,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Log In",
+                      "Set Password",
                       style: GoogleFonts.leagueSpartan(
                         fontSize: 28,
                         color: Colors.white,
@@ -63,18 +60,9 @@ class LoginPage extends StatelessWidget {
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(28),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Welcome",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          "Welcome back! Your next favorite meal, from local hidden gems to comforting classics, is just a quick sign-in away.",
+                          "Forgot your password? No problem! Let’s get you back in so your next favorite meal isn't kept waiting.",
                           style: GoogleFonts.leagueSpartan(
                             fontSize: 14,
                             fontWeight: FontWeight.normal,
@@ -84,50 +72,24 @@ class LoginPage extends StatelessWidget {
                         SizedBox(height: 32),
                         fillText(
                           context,
-                          "Email or Mobile Number",
-                          "Enter your email",
-                          false,
-                        ),
-                        SizedBox(height: 12),
-                        fillText(
-                          context,
                           "Password",
                           "Enter your password",
                           true,
                         ),
-                        SizedBox(height: 8),
-                        Align(
-                          alignment: AlignmentGeometry.centerRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              //Navigasi ke Forgot Password
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ForgotpasswordPage(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "Forgot Password",
-                              style: GoogleFonts.leagueSpartan(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.orangebase,
-                              ),
-                            ),
-                          ),
+                        SizedBox(height: 12),
+                        fillText(
+                          context,
+                          "Confirm Password",
+                          "Enter your confirm password",
+                          true,
                         ),
-                        SizedBox(height: 48),
+                        SizedBox(height: 32),
                         Center(
                           child: SizedBox(
-                            width: 220,
-                            height: 50,
+                            width: 240,
+                            height: 40,
                             child: ElevatedButton(
-                              onPressed: () => Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (_) => HomePage()),
-                              ),
+                              onPressed: () {},
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.orangebase,
                                 foregroundColor: Colors.white,
@@ -139,64 +101,13 @@ class LoginPage extends StatelessWidget {
                                 ),
                               ),
                               child: Text(
-                                "Log In",
+                                "Create New Password",
                                 style: GoogleFonts.leagueSpartan(
-                                  fontSize: 24,
+                                  fontSize: 18,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 24),
-                        Center(
-                          child: Text(
-                            "or sign up with",
-                            style: GoogleFonts.leagueSpartan(
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _btnThirdParty('assets/svgs/gmail_icon.svg', 24),
-                            _btnThirdParty('assets/svgs/fb_icon.svg', 34),
-                            _btnThirdParty('assets/svgs/mark_icon.svg', 34),
-                          ],
-                        ),
-                        SizedBox(height: 24),
-                        Center(
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "Don't have an account? ",
-                                  style: GoogleFonts.leagueSpartan(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'Sign Up',
-                                  style: GoogleFonts.leagueSpartan(
-                                    fontSize: 14,
-                                    color: AppColors.orangebase,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => SignupPage(),
-                                        ),
-                                      );
-                                    },
-                                ),
-                              ],
                             ),
                           ),
                         ),
@@ -206,35 +117,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _btnThirdParty(String path, double size) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-      child: SizedBox(
-        width: 48, // Lebar tombol yang kamu inginkan
-        height: 48, // Tinggi tombol yang kamu inginkan
-        child: ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets
-                .zero, // Menghapus padding bawaan agar ikon pas di tengah
-            backgroundColor: AppColors.orange2,
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                18,
-              ), // Gunakan BorderRadius, bukan BorderRadiusGeometry
-            ),
-          ),
-          child: SvgPicture.asset(
-            path,
-            width: size, // Ukuran ikon di dalam tombol
-            height: size,
           ),
         ),
       ),

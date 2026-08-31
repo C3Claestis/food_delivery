@@ -1,16 +1,13 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery/bloc/LoginCubit.dart';
-import 'package:food_delivery/core/theme/app_colors.dart';
-import 'package:food_delivery/features/auth/presentation/pages/forgotpassword_page.dart';
-import 'package:food_delivery/features/auth/presentation/pages/home_page.dart';
-import 'package:food_delivery/features/auth/presentation/pages/signup_page.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+import '../../../../bloc/LoginCubit.dart';
+import '../../../../core/theme/app_colors.dart';
+
+class SignupPage extends StatelessWidget {
+  const SignupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +29,13 @@ class LoginPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: SvgPicture.asset(
-                        'assets/svgs/backarrow_icon.svg',
+                        'assets/svgs/backarrow_icon.svg', 
                         width: 18,
                         height: 18,
                       ),
                     ),
                     Text(
-                      "Log In",
+                      "New Account",
                       style: GoogleFonts.leagueSpartan(
                         fontSize: 28,
                         color: Colors.white,
@@ -65,69 +62,83 @@ class LoginPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Welcome",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          "Welcome back! Your next favorite meal, from local hidden gems to comforting classics, is just a quick sign-in away.",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                            height: 1.25,
-                          ),
-                        ),
-                        SizedBox(height: 32),
                         fillText(
                           context,
-                          "Email or Mobile Number",
-                          "Enter your email",
-                          false,
+                          "Full Name",
+                          "Enter your full name",
+                          InputType.text,
                         ),
-                        SizedBox(height: 12),
                         fillText(
                           context,
                           "Password",
                           "Enter your password",
-                          true,
+                          InputType.password,
                         ),
-                        SizedBox(height: 8),
-                        Align(
-                          alignment: AlignmentGeometry.centerRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              //Navigasi ke Forgot Password
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ForgotpasswordPage(),
+                        fillText(
+                          context,
+                          "Email",
+                          "Enter your email",
+                          InputType.text,
+                        ),
+                        fillText(
+                          context,
+                          "Mobile Number",
+                          "Enter your phone number",
+                          InputType.number,
+                        ),
+                        fillText(
+                          context,
+                          "Date of Birth",
+                          "Enter your birthday",
+                          InputType.date,
+                        ),
+                        SizedBox(height: 12),
+                        Center(
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "By continuing, you agree to \n",
+                                  style: GoogleFonts.leagueSpartan(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
                                 ),
-                              );
-                            },
-                            child: Text(
-                              "Forgot Password",
-                              style: GoogleFonts.leagueSpartan(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.orangebase,
-                              ),
+                                TextSpan(
+                                  text: "Term of Use ",
+                                  style: GoogleFonts.leagueSpartan(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.orangebase,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "and ",
+                                  style: GoogleFonts.leagueSpartan(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "Privacy Policy",
+                                  style: GoogleFonts.leagueSpartan(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.orangebase,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        SizedBox(height: 48),
+                        SizedBox(height: 12),
                         Center(
                           child: SizedBox(
                             width: 220,
                             height: 50,
                             child: ElevatedButton(
-                              onPressed: () => Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (_) => HomePage()),
-                              ),
+                              onPressed: () {},
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.orangebase,
                                 foregroundColor: Colors.white,
@@ -139,7 +150,7 @@ class LoginPage extends StatelessWidget {
                                 ),
                               ),
                               child: Text(
-                                "Log In",
+                                "Sign Up",
                                 style: GoogleFonts.leagueSpartan(
                                   fontSize: 24,
                                   color: Colors.white,
@@ -149,14 +160,11 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 24),
+                        SizedBox(height: 8),
                         Center(
                           child: Text(
-                            "or sign up with",
-                            style: GoogleFonts.leagueSpartan(
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
+                            'or sign up with',
+                            style: GoogleFonts.leagueSpartan(fontSize: 14),
                           ),
                         ),
                         SizedBox(height: 8),
@@ -168,38 +176,32 @@ class LoginPage extends StatelessWidget {
                             _btnThirdParty('assets/svgs/mark_icon.svg', 34),
                           ],
                         ),
-                        SizedBox(height: 24),
+                        SizedBox(height: 12),
                         Center(
                           child: RichText(
+                            textAlign: TextAlign.center,
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: "Don't have an account? ",
+                                  text: "Already have an account? ",
                                   style: GoogleFonts.leagueSpartan(
                                     fontSize: 14,
                                     color: Colors.black,
                                   ),
                                 ),
                                 TextSpan(
-                                  text: 'Sign Up',
+                                  text: "Log in",
                                   style: GoogleFonts.leagueSpartan(
                                     fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                     color: AppColors.orangebase,
                                   ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => SignupPage(),
-                                        ),
-                                      );
-                                    },
-                                ),
+                                ),                              
                               ],
                             ),
                           ),
                         ),
+                        SizedBox(height: 22),
                       ],
                     ),
                   ),
@@ -245,37 +247,62 @@ class LoginPage extends StatelessWidget {
     BuildContext context,
     String teks,
     String hiddenTeks,
-    bool isPassword,
+    InputType isChoose,
   ) {
-    return SizedBox(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            teks,
-            style: GoogleFonts.leagueSpartan(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
+    TextInputType keyboardType = TextInputType.text;
+
+    // 1. Tentukan keyboardType berdasarkan enum InputType
+    switch (isChoose) {
+      case InputType.number:
+        keyboardType = TextInputType.number;
+        break;
+      case InputType.date:
+        keyboardType = TextInputType.datetime;
+        break;
+      case InputType.password:
+        keyboardType = TextInputType.visiblePassword;
+        break;
+      case InputType.text:
+        keyboardType = TextInputType.text;
+        break;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: SizedBox(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              teks,
+              style: GoogleFonts.leagueSpartan(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          isPassword
-              ? BlocBuilder<LoginCubit, bool>(
-                  builder: (context, isObscure) {
-                    return _buildTextFormField(
-                      context,
-                      hiddenTeks: hiddenTeks,
-                      isPassword: true,
-                      isObscure: isObscure,
-                    );
-                  },
-                )
-              : _buildTextFormField(
-                  context,
-                  hiddenTeks: hiddenTeks,
-                  isPassword: false,
-                  isObscure: false,
-                ),
-        ],
+            (isChoose == InputType.password)
+                ? BlocBuilder<LoginCubit, bool>(
+                    builder: (context, isObscure) {
+                      return _buildTextFormField(
+                        context,
+                        hiddenTeks: hiddenTeks,
+                        isPassword: true,
+                        isObscure: isObscure,
+                        keyboardType:
+                            keyboardType, // 2. Pass keyboardType ke fungsi
+                      );
+                    },
+                  )
+                : _buildTextFormField(
+                    context,
+                    hiddenTeks: hiddenTeks,
+                    isPassword: false,
+                    isObscure: false,
+                    keyboardType:
+                        keyboardType, // 2. Pass keyboardType ke fungsi
+                  ),
+          ],
+        ),
       ),
     );
   }
@@ -285,20 +312,20 @@ class LoginPage extends StatelessWidget {
     required String hiddenTeks,
     required bool isPassword,
     required bool isObscure,
+    required TextInputType keyboardType, // 3. Terima parameter keyboardType
   }) {
     return TextFormField(
+      keyboardType: keyboardType, // 4. Pasang ke TextFormField di sini
       obscureText: isPassword ? isObscure : false,
       obscuringCharacter: '*',
       decoration: InputDecoration(
-        isDense:
-            true, // 1. Mengunci tinggi field agar ringkas/tidak ramping melar
+        isDense: true,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
-          vertical: 12, // 2. Mengatur ketebalan/tinggi input dari dalam
+          vertical: 12,
         ),
         hintText: hiddenTeks,
         hintStyle: GoogleFonts.leagueSpartan(color: Colors.grey, fontSize: 14),
-        // 3. Batasi ukuran suffixIcon secara langsung lewat BoxConstraints
         suffixIconConstraints: const BoxConstraints(
           maxWidth: 40,
           maxHeight: 40,
@@ -331,3 +358,5 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
+enum InputType { text, password, number, date }
