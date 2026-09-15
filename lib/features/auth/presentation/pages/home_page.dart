@@ -1,10 +1,16 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_delivery/bloc/carousel_cubit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../data/food_model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,6 +22,15 @@ class HomePage extends StatelessWidget {
     final TextEditingController _searchController = TextEditingController();
 
     final List<Widget> banners = [_carousel1(), _carousel2(), _carousel3()];
+
+    // Fungsi untuk membaca JSON lokal
+    Future<List<FoodModel>> loadLocalJson() async {
+      final String response = await rootBundle.loadString(
+        'assets/json/foods.json',
+      );
+      final List<dynamic> data = json.decode(response);
+      return data.map((json) => FoodModel.fromJson(json)).toList();
+    }
 
     return BlocProvider(
       create: (context) => CarouselCubit(),
@@ -192,88 +207,43 @@ class HomePage extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _itemBestSeller(
-                                path: 'assets/images/food-1.png',
-                                nilai: 130.0,
-                              ),
-                              _itemBestSeller(
-                                path: 'assets/images/food-2.png',
-                                nilai: 30.12,
-                              ),
-                              _itemBestSeller(
-                                path: 'assets/images/food-3.png',
-                                nilai: 12.99,
-                              ),
-                              _itemBestSeller(
-                                path: 'assets/images/food-4.png',
-                                nilai: 8.42,
-                              ),
-                            ],
-                          ),
+                          bestSellerBase(),
                           const SizedBox(height: 18),
-                          Builder(
-                            builder: (context) {
-                              return Column(
-                                children: [
-                                  SizedBox(
-                                    height: 140,
-                                    child: PageView.builder(
-                                      itemCount: banners.length,
-                                      onPageChanged: (index) {
-                                        // Panggil Cubit saat halaman digeser
-                                        context
-                                            .read<CarouselCubit>()
-                                            .changePage(index);
-                                      },
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0,
-                                          ),
-                                          child: banners[index],
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                          
-                                  // Rebuild hanya bagian Dots Indicator menggunakan BlocBuilder
-                                  BlocBuilder<CarouselCubit, int>(
-                                    builder: (context, currentIndex) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: List.generate(
-                                          banners.length,
-                                          (index) => AnimatedContainer(
-                                            duration: const Duration(
-                                              milliseconds: 300,
-                                            ),
-                                            margin:
-                                                const EdgeInsets.symmetric(
-                                                  horizontal: 3,
-                                                ),
-                                            width: currentIndex == index
-                                                ? 16
-                                                : 6,
-                                            height: 6,
-                                            decoration: BoxDecoration(
-                                              color: currentIndex == index
-                                                  ? const Color(0xFFE55325)
-                                                  : Colors.grey.shade300,
-                                              borderRadius:
-                                                  BorderRadius.circular(3),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              );
+
+                          //Carousel Window
+                          _carouselBase(banners),
+                          const SizedBox(height: 18),
+
+                          Align(
+                            alignment: AlignmentGeometry.centerLeft,
+                            child: Text(
+                              "Recommend",
+                              style: GoogleFonts.leagueSpartan(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          FutureBuilder<List<FoodModel>>(
+                            future: loadLocalJson(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+
+                              if (snapshot.hasError) {
+                                return Center(
+                                  child: Text("Error: ${snapshot.error}"),
+                                );
+                              }
+
+                              final foods = snapshot.data ?? [];
+
+                              return _buildFoodGrid(foods);
                             },
                           ),
                         ],
@@ -289,7 +259,191 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  //Gridview content recomend
+  GridView _buildFoodGrid(List<FoodModel> foods) {
+    return GridView.builder(      
+      padding: EdgeInsets.zero,
+      shrinkWrap: true, // Dipakai jika GridView di dalam SingleChildScrollView
+      physics:
+          const NeverScrollableScrollPhysics(), // Scroll mengikuti layar utama
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // 2 Kolom ke samping
+        crossAxisSpacing: 12, // Jarak antar card secara horizontal
+        mainAxisSpacing: 12, // Jarak antar card secara vertikal
+        childAspectRatio:
+            0.85, // Rasio Lebar : Tinggi card (Sesuaikan jika teks meluap)
+      ),
+      itemCount: foods.length,
+      itemBuilder: (context, index) {
+        return buildFoodCard(foods[index]);
+      },
+    );
+  }
+
+  Widget buildFoodCard(FoodModel food) {
+    return Container(
+      width: 220, // Sesuaikan lebar kartu yang diinginkan
+      height: 200, // Sesuaikan tinggi kartu yang diinginkan
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          children: [
+            // 1. GAMBAR LATAR BELAKANG (PENUH)
+            Positioned.fill(
+              child: Image.asset(
+                food.image, // Ganti dengan path gambar Anda
+                fit: BoxFit.cover,
+              ),
+            ),
+
+            // 2. BADGE RATING (Pojok Kiri Atas)
+            Positioned(
+              top: 12,
+              left: 12,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      food.rating.toStringAsFixed(1),
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                        height: 0.2
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(Icons.star_rounded, color: AppColors.yellowbase, size: 18),
+                  ],
+                ),
+              ),
+            ),
+
+            // 3. TOMBOL FAVORIT / HEART (Di Samping Badge Rating)
+            Positioned(
+              top: 12,
+              left:
+                  78, // Mengatur posisi horizontal agar tepat di sebelah rating badge
+              child: Container(
+                width: 28,
+                height: 28,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  food.isFavorite ? Icons.favorite_rounded: Icons.favorite_border_rounded,
+                  color: AppColors.orangebase, // Warna oranye/merah favorit
+                  size: 16,
+                ),
+              ),
+            ),
+
+            // 4. BADGE HARGA (Pojok Kanan Bawah)
+            Positioned(
+              bottom: 20,
+              right:
+                  0, // Nempel di pinggir kanan atau beri nilai misal: 12 jika ingin berjarak
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.orangebase, // Warna latar oranye
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    bottomLeft: Radius.circular(16),
+                  ),
+                ),
+                child: Text(
+                  "\$${food.price.toStringAsFixed(1)}",
+                  style: GoogleFonts.leagueSpartan(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   //Carousel
+  Builder _carouselBase(List<Widget> banners) {
+    return Builder(
+      builder: (context) {
+        return Column(
+          children: [
+            SizedBox(
+              height: 140,
+              child: PageView.builder(
+                itemCount: banners.length,
+                onPageChanged: (index) {
+                  // Panggil Cubit saat halaman digeser
+                  context.read<CarouselCubit>().changePage(index);
+                },
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: banners[index],
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            // Rebuild hanya bagian Dots Indicator menggunakan BlocBuilder
+            BlocBuilder<CarouselCubit, int>(
+              builder: (context, currentIndex) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    banners.length,
+                    (index) => AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      width: currentIndex == index ? 16 : 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: currentIndex == index
+                            ? const Color(0xFFE55325)
+                            : Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _carousel1() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -530,6 +684,19 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  //Best Seller
+  Row bestSellerBase() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _itemBestSeller(path: 'assets/images/food-1.png', nilai: 130.0),
+        _itemBestSeller(path: 'assets/images/food-2.png', nilai: 30.12),
+        _itemBestSeller(path: 'assets/images/food-3.png', nilai: 12.99),
+        _itemBestSeller(path: 'assets/images/food-4.png', nilai: 8.42),
+      ],
     );
   }
 
