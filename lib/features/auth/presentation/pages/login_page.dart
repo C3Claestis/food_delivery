@@ -2,10 +2,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_delivery/bloc/LoginCubit.dart';
+import 'package:food_delivery/bloc/login_cubit.dart';
 import 'package:food_delivery/core/theme/app_colors.dart';
 import 'package:food_delivery/features/auth/presentation/pages/forgotpassword_page.dart';
-import 'package:food_delivery/features/auth/presentation/pages/home_page.dart';
+import 'package:food_delivery/features/auth/presentation/pages/main_page.dart';
 import 'package:food_delivery/features/auth/presentation/pages/signup_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -126,7 +126,7 @@ class LoginPage extends StatelessWidget {
                             child: ElevatedButton(
                               onPressed: () => Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (_) => HomePage()),
+                                MaterialPageRoute(builder: (_) => MainPage()),
                               ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.orangebase,

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../bloc/LoginCubit.dart';
+import '../../../../bloc/login_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class SignupPage extends StatelessWidget {

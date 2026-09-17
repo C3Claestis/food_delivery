@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_delivery/bloc/carousel_cubit.dart';
+import 'package:food_delivery/features/auth/custom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -35,6 +36,7 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => CarouselCubit(),
       child: Scaffold(
+        endDrawer: CustomDrawer(),
         body: Container(
           width: double.infinity,
           height: double.infinity,
@@ -77,7 +79,9 @@ class HomePage extends StatelessWidget {
                     const SizedBox(width: 8),
                     _buildHeaderButton(
                       iconPath: 'assets/svgs/user_icon.svg',
-                      onTap: () {},
+                      onTap: () {
+                        Scaffold.of(context).openEndDrawer();
+                      },
                     ),
                   ],
                 ),
@@ -225,27 +229,7 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          FutureBuilder<List<FoodModel>>(
-                            future: loadLocalJson(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-
-                              if (snapshot.hasError) {
-                                return Center(
-                                  child: Text("Error: ${snapshot.error}"),
-                                );
-                              }
-
-                              final foods = snapshot.data ?? [];
-
-                              return _buildFoodGrid(foods);
-                            },
-                          ),
+                          recommendMainContent(loadLocalJson),
                         ],
                       ),
                     ),
@@ -260,8 +244,29 @@ class HomePage extends StatelessWidget {
   }
 
   //Gridview content recomend
+  FutureBuilder<List<FoodModel>> recommendMainContent(
+    Future<List<FoodModel>> Function() loadLocalJson,
+  ) {
+    return FutureBuilder<List<FoodModel>>(
+      future: loadLocalJson(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(child: Text("Error: ${snapshot.error}"));
+        }
+
+        final foods = snapshot.data ?? [];
+
+        return _buildFoodGrid(foods);
+      },
+    );
+  }
+
   GridView _buildFoodGrid(List<FoodModel> foods) {
-    return GridView.builder(      
+    return GridView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true, // Dipakai jika GridView di dalam SingleChildScrollView
       physics:
@@ -271,7 +276,7 @@ class HomePage extends StatelessWidget {
         crossAxisSpacing: 12, // Jarak antar card secara horizontal
         mainAxisSpacing: 12, // Jarak antar card secara vertikal
         childAspectRatio:
-            0.85, // Rasio Lebar : Tinggi card (Sesuaikan jika teks meluap)
+            1.2, // Rasio Lebar : Tinggi card (Sesuaikan jika teks meluap)
       ),
       itemCount: foods.length,
       itemBuilder: (context, index) {
@@ -328,11 +333,15 @@ class HomePage extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
-                        height: 0.2
+                        height: 0.2,
                       ),
                     ),
                     SizedBox(width: 4),
-                    Icon(Icons.star_rounded, color: AppColors.yellowbase, size: 18),
+                    Icon(
+                      Icons.star_rounded,
+                      color: AppColors.yellowbase,
+                      size: 18,
+                    ),
                   ],
                 ),
               ),
@@ -351,7 +360,9 @@ class HomePage extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  food.isFavorite ? Icons.favorite_rounded: Icons.favorite_border_rounded,
+                  food.isFavorite
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_rounded,
                   color: AppColors.orangebase, // Warna oranye/merah favorit
                   size: 16,
                 ),
@@ -364,10 +375,7 @@ class HomePage extends StatelessWidget {
               right:
                   0, // Nempel di pinggir kanan atau beri nilai misal: 12 jika ingin berjarak
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: const BoxDecoration(
                   color: AppColors.orangebase, // Warna latar oranye
                   borderRadius: BorderRadius.only(
