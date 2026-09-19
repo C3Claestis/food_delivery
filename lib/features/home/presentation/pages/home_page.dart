@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:food_delivery/bloc/carousel_cubit.dart';
+import 'package:food_delivery/bloc/home/carousel_cubit.dart';
 import 'package:food_delivery/features/auth/custom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 

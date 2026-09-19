@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:food_delivery/features/auth/custom_drawer.dart';
 import 'package:food_delivery/features/home/presentation/pages/home_page.dart';
 
-import '../../../../bloc/bottom_nav_cubit.dart';
+import '../../../../bloc/home/bottom_nav_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class MainPage extends StatelessWidget {
