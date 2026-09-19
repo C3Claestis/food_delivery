@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_delivery/core/theme/app_colors.dart';
-import 'package:food_delivery/features/home/presentation/pages/myorders_page.dart';
+import 'package:food_delivery/features/home/presentation/pages/myorders/myorders_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomDrawer extends StatelessWidget {

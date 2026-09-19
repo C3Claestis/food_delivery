@@ -15,6 +15,52 @@ class OrderItem {
 }
 
 // Dummy List (Data Sementara)
+final List<OrderItem> mockActiveOrders = [
+  OrderItem(
+    path: 'assets/images/burger.png',
+    name: "Classic Beef Cheese Burger",
+    price: 42.50,
+    date: "18 Sep, 07:30 pm",
+    items: 1,
+  ),
+  OrderItem(
+    path: 'assets/images/chicken_curry.png',
+    name: "Creamy Spaghetti Carbonara",
+    price: 65.00,
+    date: "17 Sep, 01:15 pm",
+    items: 2,
+  ),
+  OrderItem(
+    path: 'assets/images/esteh.jpg',
+    name: "Iced Matcha Oat Latte",
+    price: 18.50,
+    date: "15 Sep, 10:45 am",
+    items: 3,
+  ),
+  OrderItem(
+    path: 'assets/images/sate_barat.png',
+    name: "Grilled Salmon Steak",
+    price: 88.90,
+    date: "12 Sep, 08:00 pm",
+    items: 1,
+  ),
+  OrderItem(
+    path: 'assets/images/kopimewah.jpg',
+    name: "Glazed Chocolate Donut",
+    price: 12.00,
+    date: "10 Sep, 03:20 pm",
+    items: 4,
+  ),
+  OrderItem(
+    path: 'assets/images/sirupjeruk.jpg',
+    name: "Lemon Egg Toast",
+    price: 24.75,
+    date: "05 Sep, 09:10 am",
+    items: 2,
+  ),
+];
+
+// Dummy List (Data Sementara)
 final List<OrderItem> mockCompletedOrders = [
   OrderItem(
     path: 'assets/images/cantelli.jpg',
